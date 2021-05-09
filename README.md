@@ -10,5 +10,5 @@ Description:    Debian GNU/Linux 10 (buster)
 Release:        10
 Codename:       buster
 内核版本: 4.19.0-13-amd64
-Kuberenetes version: 1.19.10
+Kubernetes version: 1.19.10
 下载软件包地址: https://dl.k8s.io/v1.19.10/kubernetes-server-linux-amd64.tar.gz
