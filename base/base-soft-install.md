@@ -19,6 +19,6 @@ Must specify certinfo target through -cert, -csr, -domain or -serial + -aki
 ```
 ***install core soft in all node***
 ```
-~# apt-get install ntpdate vim git psmisc lvm2 jq  -y
+~# apt-get install ntpdate vim git psmisc lvm2 jq supervisor -y
 ~# apt-get install ipvsadm ipset sysstat conntrack  libseccomp2 -y
 ```
