@@ -11,6 +11,7 @@ Codename:       buster
 Kubernetes version: 1.19.10
 etcd version: 3.4.12
 下载软件包地址: https://dl.k8s.io/v1.19.10/kubernetes-server-linux-amd64.tar.gz
+service_ip: 10.99.0.0/12
 ```
 __环境说明__
 
@@ -21,4 +22,4 @@ __环境说明__
 | 172-16-100-63          | 172.16.100.63  | kube-apiserver,kube-controller-manager,kube-scheduler,VIP    | 控制平面            | 2核2G | Timeout for the upstream to send data.                                                   |
 | 172-16-100-64           | 172.16.100.64   | docker,kubelet,kube-proxy    | 数据平面 |   2核2G     | A unique identifier to identity the                                   |
 | 172-16-100-65    | 172.16.100.65  | docker,kubelet,kube-proxy    | 数据平面         | 2核2G | Max size of each batch  
-| 172-16-100-65    | 172.16.100.99  | VIP    | LB         |  | VIP                                                       |
+| 172-16-100-65    | 172.16.100.69  | VIP    | LB         |  | VIP                                                       |
