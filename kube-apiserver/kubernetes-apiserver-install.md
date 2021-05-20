@@ -7,6 +7,7 @@
 # 主控节点创建服务启动脚本
 # cat /data/applications/kubernetes-v1.19.10/server/scripts/kube-apiserver-service.sh
 # chmod +x /data/applications/kubernetes-v1.19.10/server/scripts/kube-apiserver-service.sh
+# cat /data/applications/kubernetes-v1.19.10/server/scripts/kube-apiserver-service.sh
 #!/bin/bash
 ../bin/kube-apiserver \
       --v=2  \
@@ -34,19 +35,20 @@
       --enable-bootstrap-token-auth=true  \
       --log-dir=/opt/logs/kubernetes/kube-apiserver \
       --audit-log-mode=batch \
+      --audit-policy-file=../conf/audit-policy.yaml \
+      --audit-log-path=/opt/logs/kubernetes/kube-apiserver-service/kubernetes_audit_info.log \
       --audit-log-maxbackup=10 \
+      --audit-log-maxage=30 \
       --audit-log-maxsize=100 \
-      # --target-ram-mb=1024 \
-      --requestheader-client-ca-file=../certs/front-proxy-ca.pem  \
-      --proxy-client-cert-file=../certs/front-proxy-client.pem  \
-      --proxy-client-key-file=../certs/front-proxy-client-key.pem  \
+      --requestheader-client-ca-file=../certs/front-proxy-ca.pem \
+      --proxy-client-cert-file=../certs/front-proxy-client.pem \
+      --proxy-client-key-file=../certs/front-proxy-client-key.pem \
       --requestheader-allowed-names=aggregator  \
       --requestheader-group-headers=X-Remote-Group  \
       --requestheader-extra-headers-prefix=X-Remote-Extra-  \
       --requestheader-username-headers=X-Remote-User
-      # --token-auth-file=/etc/kubernetes/token.csv
 # 创建日志目录
-# mkdir  /opt/logs/kubernetes/kube-apiserver-service -p
+# mkdir  /opt/logs/kubernetes/kube-apiserver-service  -p
 # cat /etc/supervisor/conf.d/kube-apiserver-service.conf 
 [program:kube-apiserver-service]
 command=/data/applications/kubernetes/server/scripts/kube-apiserver-service.sh 
@@ -61,7 +63,7 @@ stopsignal=QUIT                                                 ; signal used to
 stopwaitsecs=10                                                 ; max num secs to wait b4 SIGKILL (default 10)
 user=root                                                       ; setuid to this UNIX account to run the program
 redirect_stderr=true                                            ; redirect proc stderr to stdout (default false)
-stdout_logfile=/opt/logs/kubernetes/kube-apiserver/kube-apiserver-service_info.log        ; stderr log path, NONE for none; default AUTO
+stdout_logfile=/opt/logs/kubernetes/kube-apiserver-service/kube-apiserver-service_info.log        ; stderr log path, NONE for none; default AUTO
 stdout_logfile_maxbytes=64MB                                    ; max # logfile bytes b4 rotation (default 50MB)
 stdout_logfile_backups=4                                        ; # of stdout logfile backups (default 10)
 stdout_capture_maxbytes=1MB                                     ; number of bytes in 'capturemode' (default 0)
@@ -73,5 +75,116 @@ kube-apiserver-service: added process group
 # supervisorctl status kube-apiserver-service 
 kube-apiserver-service           RUNNING   pid 13201, uptime 0:02:30
 # 此时控制节点apiserver安装完成，其它控制节点安装步骤类似
+
+```
+
+```yaml
+# 生成审计策略文件
+# cat /data/applications/kubernetes-v1.19.10/server/conf/audit-policy.yaml 
+apiVersion: audit.k8s.io/v1  # This is required.
+kind: Policy
+# Don't generate audit events for all requests in RequestReceived stage.
+omitStages:
+  - "RequestReceived"
+rules:
+  # The following requests were manually identified as high-volume and low-risk,
+  # so drop them.
+  - level: None
+    users: ["system:kube-proxy"]
+    verbs: ["watch"]
+    resources:
+      - group: "" # core
+        resources: ["endpoints", "services"]
+  - level: None
+    users: ["system:unsecured"]
+    namespaces: ["kube-system"]
+    verbs: ["get"]
+    resources:
+      - group: "" # core
+        resources: ["configmaps"]
+  - level: None
+    users: ["kubelet"] # legacy kubelet identity
+    verbs: ["get"]
+    resources:
+      - group: "" # core
+        resources: ["nodes"]
+  - level: None
+    userGroups: ["system:nodes"]
+    verbs: ["get"]
+    resources:
+      - group: "" # core
+        resources: ["nodes"]
+  - level: None
+    users:
+      - system:kube-controller-manager
+      - system:kube-scheduler
+      - system:serviceaccount:kube-system:endpoint-controller
+    verbs: ["get", "update"]
+    namespaces: ["kube-system"]
+    resources:
+      - group: "" # core
+        resources: ["endpoints"]
+  - level: None
+    users: ["system:apiserver"]
+    verbs: ["get"]
+    resources:
+      - group: "" # core
+        resources: ["namespaces"]
+  # Don't log these read-only URLs.
+  - level: None
+    nonResourceURLs:
+      - /healthz*
+      - /version
+      - /swagger*
+  # Don't log events requests.
+  - level: None
+    resources:
+      - group: "" # core
+        resources: ["events"]
+  # Secrets, ConfigMaps, and TokenReviews can contain sensitive & binary data,
+  # so only log at the Metadata level.
+  - level: Metadata
+    resources:
+      - group: "" # core
+        resources: ["secrets", "configmaps"]
+      - group: authentication.k8s.io
+        resources: ["tokenreviews"]
+  # Get repsonses can be large; skip them.
+  - level: Request
+    verbs: ["get", "list", "watch"]
+    resources:
+      - group: "" # core
+      - group: "admissionregistration.k8s.io"
+      - group: "apps"
+      - group: "authentication.k8s.io"
+      - group: "authorization.k8s.io"
+      - group: "autoscaling"
+      - group: "batch"
+      - group: "certificates.k8s.io"
+      - group: "extensions"
+      - group: "networking.k8s.io"
+      - group: "policy"
+      - group: "rbac.authorization.k8s.io"
+      - group: "settings.k8s.io"
+      - group: "storage.k8s.io"
+  # Default level for known APIs
+  - level: RequestResponse
+    resources:
+      - group: "" # core
+      - group: "admissionregistration.k8s.io"
+      - group: "apps"
+      - group: "authentication.k8s.io"
+      - group: "authorization.k8s.io"
+      - group: "autoscaling"
+      - group: "batch"
+      - group: "certificates.k8s.io"
+      - group: "extensions"
+      - group: "networking.k8s.io"
+      - group: "policy"
+      - group: "rbac.authorization.k8s.io"
+      - group: "settings.k8s.io"
+      - group: "storage.k8s.io"
+  # Default level for all other requests.
+  - level: Metadata
 
 ```

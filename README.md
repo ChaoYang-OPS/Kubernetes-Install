@@ -22,4 +22,4 @@ __环境说明__
 | 172-16-100-63          | 172.16.100.63  | kube-apiserver,kube-controller-manager,kube-scheduler,VIP    | 控制平面            | 2核2G | Master and HA.                                                   |
 | 172-16-100-64           | 172.16.100.64   | docker,kubelet,kube-proxy    | 数据平面 |   2核2G     | data plan Work node                                   |
 | 172-16-100-65    | 172.16.100.65  | docker,kubelet,kube-proxy    | 数据平面         | 2核2G | data plan Work node  
-| 172-16-100-65    | 172.16.100.69  | VIP    | LB         |  | VIP                                                       |
+|     | 172.16.100.69  | VIP    | LB         |  | VIP                                                       |
