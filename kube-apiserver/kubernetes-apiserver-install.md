@@ -1,6 +1,6 @@
 # 安装apiserver
 
-```
+```shell
 # 控制面板
 # mkdir /opt/logs/kubernetes -p  
 # cd /data/applications/kubernetes-v1.19.10/server/scripts/

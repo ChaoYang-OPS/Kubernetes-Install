@@ -1,9 +1,8 @@
-# get certs
-
++ **生成证书**
 # SERVICE_IP: 10.99.0.0/12
 #  生成CA,操作节点在61: 172-16-100-61
 
-```
+```shell
 ~# cd /data/applications/kubernetes-v1.19.10/server/certs/
 # cat kubernetes-certs-ca.json
 {
