@@ -252,4 +252,12 @@ cfssl gencert \
 websites. For more information see the Baseline Requirements for the Issuance and Management
 of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
 specifically, section 10.2.3 ("Information Requirements").
+# 创建ServiceAccount Key
+# openssl genrsa -out /data/applications/kubernetes-v1.19.10/server/certs/service-account.key 2048
+Generating RSA private key, 2048 bit long modulus (2 primes)
+.................+++++
+..........................+++++
+e is 65537 (0x010001)
+# openssl rsa -in /data/applications/kubernetes-v1.19.10/server/certs/service-account.key -pubout -out /data/applications/kubernetes-v1.19.10/server/certs/service-account.pub
+writing RSA key
 ```

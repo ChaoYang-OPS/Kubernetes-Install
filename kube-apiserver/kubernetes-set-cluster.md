@@ -1,4 +1,4 @@
-```
+```shell
 
 # 生成kube-controller-manager.kubeconfig
 # cd /data/applications/kubernetes-v1.19.10/server/certs/
@@ -72,7 +72,7 @@ Switched to context "system:kube-scheduler@kubernetes".
 
 # 生成集群管理员admin的kubeconfig
 
-```
+```shell
 # cat kubernetes-certs-admin-csr.json
 {
     "CN": "admin",
@@ -108,8 +108,8 @@ websites. For more information see the Baseline Requirements for the Issuance an
 of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
 specifically, section 10.2.3 ("Information Requirements").
 
-kubectl config set-cluster kubernetes     --certificate-authority=kubernetes-ca-key.pem     --embed-certs=true     --server=https://172.16.100.69:8443     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
-# kubectl config set-cluster kubernetes     --certificate-authority=kubernetes-ca-key.pem     --embed-certs=true     --server=https://172.16.100.69:8443     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
+kubectl config set-cluster kubernetes     --certificate-authority=kubernetes-ca.pem     --embed-certs=true     --server=https://172.16.100.69:8443     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
+# kubectl config set-cluster kubernetes     --certificate-authority=kubernetes-ca.pem     --embed-certs=true     --server=https://172.16.100.69:8443     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
 Cluster "kubernetes" set.
 
 kubectl config set-credentials kubernetes-admin     --client-certificate=kubernetes-admin.pem    --client-key=kubernetes-admin-key.pem     --embed-certs=true     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
@@ -119,6 +119,7 @@ User "kubernetes-admin" set.
 kubectl config set-context kubernetes-admin@kubernetes     --cluster=kubernetes     --user=kubernetes-admin     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
 # kubectl config set-context kubernetes-admin@kubernetes     --cluster=kubernetes     --user=kubernetes-admin     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
 Context "kubernetes-admin@kubernetes" created.
+
 kubectl config use-context kubernetes-admin@kubernetes     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig
 
 # kubectl config use-context kubernetes-admin@kubernetes     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig

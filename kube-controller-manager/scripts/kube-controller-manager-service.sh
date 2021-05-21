@@ -1,0 +1,21 @@
+#!/bin/bash
+../bin/kube-controller-manager \
+      --v=2 \
+      --logtostderr=true \
+      --address=127.0.0.1 \
+      --root-ca-file=../certs/kubernetes-ca.pem \
+      --cluster-signing-cert-file=../certs/kubernetes-ca.pem \
+      --cluster-signing-key-file=../certs/kubernetes-ca-key.pem \
+      --service-account-private-key-file=../certs/kubernetes-ca-key.pem \
+      --kubeconfig=../conf/kube-controller-manager.kubeconfig \
+      --log-dir=/opt/logs/kubernetes/kube-controller-manager-service \
+      --leader-elect=true \
+      --use-service-account-credentials=true \
+      --node-monitor-grace-period=40s \
+      --node-monitor-period=5s \
+      --pod-eviction-timeout=2m0s \
+      --controllers=*,bootstrapsigner,tokencleaner \
+      --allocate-node-cidrs=true \
+      --cluster-cidr=10.244.0.0/16 \
+      --requestheader-client-ca-file=../certs/front-proxy-ca.pem \
+      --node-cidr-mask-size=24

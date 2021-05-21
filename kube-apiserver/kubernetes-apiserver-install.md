@@ -28,7 +28,7 @@
       --tls-private-key-file=../certs/kube-apiserver-key.pem  \
       --kubelet-client-certificate=../certs/kube-apiserver.pem  \
       --kubelet-client-key=../certs/kube-apiserver-key.pem  \
-      --service-account-key-file=../certs/kubernetes-ca-key.pem  \
+      --service-account-key-file=../certs/service-account.pub  \
       --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname  \
       --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota  \
       --authorization-mode=Node,RBAC  \
