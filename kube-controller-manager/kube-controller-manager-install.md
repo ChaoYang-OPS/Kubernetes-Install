@@ -11,7 +11,7 @@
       --root-ca-file=../certs/kubernetes-ca.pem \
       --cluster-signing-cert-file=../certs/kubernetes-ca.pem \
       --cluster-signing-key-file=../certs/kubernetes-ca-key.pem \
-      --service-account-private-key-file=../certs/kubernetes-ca-key.pem \
+      --service-account-private-key-file=../certs/service-account.key \
       --kubeconfig=../conf/kube-controller-manager.kubeconfig \
       --log-dir=/opt/logs/kubernetes/kube-controller-manager-service \
       --leader-elect=true \

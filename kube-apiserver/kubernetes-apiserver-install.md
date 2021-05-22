@@ -17,7 +17,7 @@
       --secure-port=6443  \
       --insecure-port=0  \
       --advertise-address=172.16.100.61 \
-      --service-cluster-ip-range=10.99.0.0/12  \
+      --service-cluster-ip-range=10.99.0.0/16  \
       --service-node-port-range=30000-32767  \
       --etcd-servers=https://172.16.100.61:2379,https://172.16.100.62:2379,https://172.16.100.63:2379 \
       --etcd-cafile=/data/applications/etcd-service/certs/etcd-service-ca.pem  \
@@ -28,7 +28,7 @@
       --tls-private-key-file=../certs/kube-apiserver-key.pem  \
       --kubelet-client-certificate=../certs/kube-apiserver.pem  \
       --kubelet-client-key=../certs/kube-apiserver-key.pem  \
-      --service-account-key-file=../certs/service-account.pub  \
+      --service-account-private-key-file=../certs/service-account.key  \
       --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname  \
       --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota  \
       --authorization-mode=Node,RBAC  \

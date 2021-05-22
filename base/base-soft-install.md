@@ -21,6 +21,7 @@ Must specify certinfo target through -cert, -csr, -domain or -serial + -aki
 ```
 ~# apt-get install ntpdate vim git psmisc lvm2 jq supervisor -y
 ~# apt-get install ipvsadm ipset sysstat conntrack  libseccomp2 -y
+# mkdir -p /data/applications/
 ~# tar -xf kubernetes-server-linux-amd64.tar.gz -C /data/applications/
 ~# mv /data/applications/kubernetes/ /data/applications/kubernetes-v1.19.10
 ~# rm -rf /data/applications/kubernetes-v1.19.10/addons/ /data/applications/kubernetes-v1.19.10/LICENSES

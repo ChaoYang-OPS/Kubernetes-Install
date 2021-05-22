@@ -117,3 +117,70 @@ stringData:
 # kubectl apply -f bootstrap-token.yaml
 secret/bootstrap-token-c3c5c6 created
 ```
+
+```shell
+# cat kube-api-to-kueblet.yaml 
+# kubectl apply -f kube-api-to-kueblet.yaml
+clusterrole.rbac.authorization.k8s.io/system:kube-apiserver-to-kubelet created
+clusterrolebinding.rbac.authorization.k8s.io/system:kube-apiserver created
+```
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:kube-apiserver-to-kubelet
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/proxy
+      - nodes/stats
+      - nodes/log
+      - nodes/spec
+      - nodes/metrics
+    verbs:
+      - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:kube-apiserver
+  namespace: ""
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:kube-apiserver-to-kubelet
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: kube-apiserver
+```
+
+```shell
+# 生成bootstrap-kubelet.kubeconfig
+# cd /data/applications/kubernetes-v1.19.10/server/certs/
+kubectl config set-cluster kubernetes     --certificate-authority=kubernetes-ca.pem     --embed-certs=true     --server=https://172.16.100.69:8443     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+
+# kubectl config set-cluster kubernetes     --certificate-authority=kubernetes-ca.pem     --embed-certs=true     --server=https://172.16.100.69:8443     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+Cluster "kubernetes" set.
+
+kubectl config set-credentials tls-bootstrap-token-kubelet     --token=c3c5c6.44b85b9709030bfa --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+
+# kubectl config set-credentials tls-bootstrap-token-kubelet     --token=c3c5c6.44b85b9709030bfa --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+User "tls-bootstrap-token-kubelet" set.
+
+kubectl config set-context tls-bootstrap-token-kubelet@kubernetes     --cluster=kubernetes     --user=tls-bootstrap-token-kubelet    --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+
+# kubectl config set-context tls-bootstrap-token-kubelet@kubernetes     --cluster=kubernetes     --user=tls-bootstrap-token-kubelet    --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+Context "tls-bootstrap-token-kubelet@kubernetes" created.
+
+kubectl config use-context tls-bootstrap-token-kubelet@kubernetes     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+
+# kubectl config use-context tls-bootstrap-token-kubelet@kubernetes     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig
+Switched to context "tls-bootstrap-token-kubelet@kubernetes".
+```
