@@ -38,6 +38,7 @@ kube-scheduler-service: added process group
 # 创建目录
 #  mkdir /root/.kube -p
 # cp /data/applications/kubernetes-v1.19.10/server/conf/kubernetes-admin.kubeconfig /root/.kube/config
+# ln -sv /data/applications/kubernetes/server/bin/kubectl /usr/local/bin/kubectl
 # kubectl get cs
 Warning: v1 ComponentStatus is deprecated in v1.19+
 NAME                 STATUS    MESSAGE             ERROR

@@ -1,38 +1,14 @@
 # data plan install docker and kubelet
 
 ```shell
-# 配置源
-# cat /etc/apt/sources.list.d/docker.list 
-deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/debian buster stable
-# apt-get update
-# apt-cache madison docker-ce | grep 19
-# apt-get install docker-ce=5:19.03.9~3-0~debian-buster -y
-# grep "LimitNOFILE" /lib/systemd/system/docker.service
-LimitNOFILE=1048576
-# sed -i "/ExecStart=/a\ExecStartPost=/usr/sbin/iptables -P FORWARD ACCEPT" /lib/systemd/system/docker.service
-# systemctl daemon-reload
-# cat /etc/docker/daemon.json 
-{
-    "exec-opts": ["native.cgroupdriver=systemd"],
-    "log-driver": "json-file",
-    "log-opts": {
-        "max-size": "100m",
-        "max-file": "10"
-    },
-    "oom-score-adjust": -1000,
-    "registry-mirrors": ["https://pqbap4ya.mirror.aliyuncs.com"],
-    "storage-driver": "overlay2",
-    "max-concurrent-downloads": 10,
-    "max-concurrent-uploads": 5,
-    "storage-opts":["overlay2.override_kernel_check=true"],
-    "live-restore": true
-}
-# systemctl restart docker
+
 # 复制bootstrap-kubelet.kubeconfig
 # scp 172.16.100.61:/data/applications/kubernetes-v1.19.10/server/conf/bootstrap-kubelet.kubeconfig  /data/applications/kubernetes-v1.19.10/server/conf/
 # scp 172.16.100.61:/data/applications/kubernetes-v1.19.10/server/certs/kubernetes-ca.pem   /data/applications/kubernetes-v1.19.10/server/certs
+# scp 172.16.100.61:/data/applications/kubernetes-v1.19.10/server/certs/front-proxy-ca.pem  /data/applications/kubernetes-v1.19.10/server/certs/
 # mkdir /data/applications/kubernetes-v1.19.10/server/manifests
 # mkdir /opt/logs/kubernetes/kube-kubelet-service -p
+# cat /data/applications/kubernetes-v1.19.10/server/conf/kubelet-conf.yaml
 ```
 
 ```yaml

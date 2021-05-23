@@ -37,6 +37,7 @@ Switched to context "kubernetes".
 # 复制文件kube-proxy.kubeconfig
 # scp 172.16.100.61:/data/applications/kubernetes-v1.19.10/server/conf/kube-proxy.kubeconfig  /data/applications/kubernetes-v1.19.10/server/conf
 # mkdir /opt/logs/kubernetes/kube-proxy-service  -p
+# cat /data/applications/kubernetes/server/conf/kube-proxy-conf.yaml
 ```
 
 ```yaml
@@ -122,7 +123,7 @@ Switched to context "kubernetes".
       --log-dir=/opt/logs/kubernetes/kube-proxy-service \
       --config=../conf/kube-proxy-conf.yaml
 # chmod +x /data/applications/kubernetes-v1.19.10/server/scripts/kube-proxy-service.sh
-# cat /etc/supervisor/conf.d/kube-apiserver-service.conf 
+# cat /etc/supervisor/conf.d/kube-proxy-service.conf 
 [program:kube-proxy-service]
 command=/data/applications/kubernetes/server/scripts/kube-proxy-service.sh 
 numprocs=1                                                      ; number of processes copies to start (def 1)
@@ -148,4 +149,8 @@ kube-proxy-service: added process group
 root@172-16-100-64:~# supervisorctl status kube-proxy-service 
 kube-proxy-service               RUNNING   pid 56229, uptime 0:00:48
 # 此时data-plan kube-proxy安装完成
+# supervisorctl status
+kube-kubelet-service             RUNNING   pid 98300, uptime 2:23:05
+kube-proxy-service               RUNNING   pid 56229, uptime 16:56:39
+
 ```

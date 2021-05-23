@@ -12,6 +12,13 @@ Kubernetes version: 1.19.10
 etcd version: 3.4.12
 下载软件包地址: https://dl.k8s.io/v1.19.10/kubernetes-server-linux-amd64.tar.gz
 service_ip: 10.99.0.0/12
+# kubectl get node
+NAME            STATUS   ROLES    AGE    VERSION
+172-16-100-61   Ready    <none>   28m    v1.19.10
+172-16-100-62   Ready    <none>   15m    v1.19.10
+172-16-100-63   Ready    <none>   79s    v1.19.10
+172-16-100-64   Ready    <none>   19h    v1.19.10
+172-16-100-65   Ready    <none>   3h1m   v1.19.10
 ```
 __环境说明__
 

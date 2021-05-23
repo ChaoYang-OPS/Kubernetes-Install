@@ -14,6 +14,7 @@
       --node-monitor-grace-period=40s \
       --node-monitor-period=5s \
       --pod-eviction-timeout=2m0s \
+      --experimental-cluster-signing-duration=87600h0m0s \
       --controllers=*,bootstrapsigner,tokencleaner \
       --allocate-node-cidrs=true \
       --cluster-cidr=10.244.0.0/16 \
