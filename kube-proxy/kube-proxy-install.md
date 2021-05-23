@@ -115,6 +115,7 @@ kubectl config set-context kubernetes     --cluster=kubernetes     --user=kubern
 Context "kubernetes" created.
 # kubectl config use-context kubernetes     --kubeconfig=/data/applications/kubernetes-v1.19.10/server/conf/kube-proxy.kubeconfig
 Switched to context "kubernetes".
+# scp 172.16.100.61:/data/applications/kubernetes-v1.19.10/server/conf/kube-proxy.kubeconfig /data/applications/kubernetes-v1.19.10/server/conf/kube-proxy.kubeconfig
 # cat /data/applications/kubernetes-v1.19.10/server/scripts/kube-proxy-service.sh
 #!/bin/bash
 ../bin/kube-proxy  \
