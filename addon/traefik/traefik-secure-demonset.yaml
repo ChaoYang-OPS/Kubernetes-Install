@@ -11,6 +11,14 @@ spec:
       port: 443
     - name: admin
       port: 8080
+    - name: tcpep
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+    - name: udpep
+      protocol: UDP
+      port: 9000
+      targetPort: 9000
   selector:
     app: traefik
 ---
