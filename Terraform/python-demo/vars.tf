@@ -8,7 +8,8 @@ variable "container_name" {
   default = "terraform-python-demo"
 }
 variable "deployment_replicas" {
-  default = "1"
+  type = number
+  default = 1
 }
 variable "namespace_name"{
     default = "terraform"
@@ -18,4 +19,16 @@ variable "service_name"{
 }
 variable "ingress_name"{
     default = "terraform-python-demo-ingress"
+}
+variable "metadata_labels"{
+    type = map(string)
+    default = {
+        env = "DEV"
+        app = "python-demo"
+        manager = "Terraform"
+    }
+}
+variable "ingress_host_name"{
+    type = string
+    default = "demo-python.opsk8s.com"
 }

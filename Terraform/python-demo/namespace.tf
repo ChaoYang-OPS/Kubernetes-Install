@@ -3,11 +3,7 @@ resource "kubernetes_namespace" "terraform_namespace" {
     annotations = {
     }
 
-    labels = {
-      env     = "DEV"
-      app     = "python-demo"
-      manager = "Terraform"
-    }
+    labels = var.metadata_labels
     name = var.namespace_name
   }
 }

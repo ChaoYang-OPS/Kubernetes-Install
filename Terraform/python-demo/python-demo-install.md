@@ -46,8 +46,12 @@ Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 Outputs:
 
 deployment_name = "terraform-python-demo"
+ingress_host_name = "demo-python.opsk8s.com"
 namespace_name = "terraform"
+service_cluster_ip = "10.99.247.241"
+service_cluster_ip_port = 80
 service_name = "terraform-python-demo-service"
+web_access_url = "http://demo-python.opsk8s.com"
 # 验证服务
 # kubectl get pods,svc,ingress,deployment -n terraform
 Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
@@ -55,7 +59,7 @@ NAME                                        READY   STATUS    RESTARTS   AGE
 pod/terraform-python-demo-c7864dc7b-6q8c5   1/1     Running   0          67s
 
 NAME                                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-service/terraform-python-demo-service   ClusterIP   10.99.194.91   <none>        80/TCP    60s
+service/terraform-python-demo-service   ClusterIP   10.99.247.241   <none>        80/TCP    60s
 
 NAME                                               CLASS    HOSTS                    ADDRESS   PORTS   AGE
 ingress.extensions/terraform-python-demo-ingress   <none>   demo-python.opsk8s.com             80      60s

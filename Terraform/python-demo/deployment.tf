@@ -2,30 +2,18 @@ resource "kubernetes_deployment" "terraform_deployment" {
   metadata {
     name = var.deployment_name
     namespace = var.namespace_name
-    labels = {
-      env     = "DEV"
-      app     = "python-demo"
-      manager = "Terraform"
-    }
+    labels = var.metadata_labels
   }
 
   spec {
     replicas = var.deployment_replicas
 
     selector {
-      match_labels = {
-        app     = "python-demo"
-        env     = "DEV"
-        manager = "Terraform"
-      }
+      match_labels = var.metadata_labels
     }
     template {
       metadata {
-        labels = {
-          app     = "python-demo"
-          env     = "DEV"
-          manager = "Terraform"
-        }
+        labels = var.metadata_labels
       }
       spec {
         container {

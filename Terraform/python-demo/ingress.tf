@@ -8,7 +8,7 @@ resource "kubernetes_ingress" "terraform_ingress" {
   }
   spec {
     rule {
-      host = "demo-python.opsk8s.com"
+      host = var.ingress_host_name
       http {
         path {
           path = "/"
