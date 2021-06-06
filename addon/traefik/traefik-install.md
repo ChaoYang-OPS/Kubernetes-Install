@@ -6,6 +6,7 @@
 # https://doc.traefik.io/traefik/user-guides/crd-acme/#services
 # https://doc.traefik.io/traefik/reference/static-configuration/cli/
 # https://doc.traefik.io/traefik/v2.2/routing/providers/kubernetes-ingress/
+#  https://doc.traefik.io/traefik/operations/dashboard/
 
 # kubectl get node --show-labels
 NAME            STATUS   ROLES    AGE   VERSION    LABELS
@@ -75,4 +76,67 @@ node/172-16-100-62 labeled
 traefik-ingress-controller-7rrbn          1/1     Running   0          114s
 traefik-ingress-controller-kfq25          1/1     Running   0          20m
 
+```
+
+# 开启认证访问
+
+```shell
+# kubectl apply -f traefik-secure-demonset.yaml
+service/traefik unchanged
+daemonset.apps/traefik-ingress-controller configured
+# apt-get install  apache2-utils -y
+#  htpasswd -c users admin
+New password: 123456
+Re-type new password: 123456
+Adding password for user admin
+# kubectl create secret generic admin-traefik --from-file=users -n kube-system
+secret/admin-traefik created
+# https://doc.traefik.io/traefik/middlewares/basicauth/
+# cat traefik-dashboard-basic-auth.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-basic-auth
+  namespace: kube-system
+spec:
+  basicAuth:
+    secret: admin-traefik
+# kubectl apply -f traefik-dashboard-basic-auth.yaml
+middleware.traefik.containo.us/traefik-dashboard-basic-auth created
+# cat traefik-dashboard-middleware.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-middleware
+  namespace: kube-system
+spec:
+  chain:
+    middlewares:
+    - name: traefik-dashboard-basic-auth
+# kubectl apply -f traefik-dashboard-middleware.yaml
+middleware.traefik.containo.us/traefik-dashboard-middleware created
+# cat traefik-dashboard-ingress-route.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-ingress-route
+  namespace: kube-system
+spec:
+  routes:
+  - match: Host(`traefik.opsk8s.com`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+    kind: Rule
+    services:
+    - name: api@internal
+      kind: TraefikService
+    middlewares:
+      - name: traefik-dashboard-middleware
+# kubectl apply -f traefik-dashboard-ingress-route.yaml
+ingressroute.traefik.containo.us/traefik-dashboard-ingress-route created
+# 验证
+# curl traefik.opsk8s.com/dashboard -I
+HTTP/1.1 401 Unauthorized
+Content-Type: text/plain
+Www-Authenticate: Basic realm="traefik"
+Date: Sun, 06 Jun 2021 14:04:50 GMT
+Content-Length: 17
 ```

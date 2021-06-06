@@ -1,0 +1,9 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-middleware
+  namespace: kube-system
+spec:
+  chain:
+    middlewares:
+    - name: traefik-dashboard-basic-auth
