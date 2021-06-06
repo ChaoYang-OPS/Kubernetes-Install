@@ -132,11 +132,22 @@ spec:
       - name: traefik-dashboard-middleware
 # kubectl apply -f traefik-dashboard-ingress-route.yaml
 ingressroute.traefik.containo.us/traefik-dashboard-ingress-route created
+# kubectl get secret -n kube-system | grep admin-traefik
+admin-traefik                                    Opaque                                1      27m
+# kubectl get IngressRoute,Middleware -n kube-system
+NAME                                                               AGE
+ingressroute.traefik.containo.us/traefik-dashboard-ingress-route   10m
+
+NAME                                                          AGE
+middleware.traefik.containo.us/traefik-dashboard-basic-auth   7m56s
+middleware.traefik.containo.us/traefik-dashboard-middleware   8m17s
 # 验证
-# curl traefik.opsk8s.com/dashboard -I
+# curl traefik.opsk8s.com/api/http/routers -I
 HTTP/1.1 401 Unauthorized
 Content-Type: text/plain
 Www-Authenticate: Basic realm="traefik"
-Date: Sun, 06 Jun 2021 14:04:50 GMT
+Date: Sun, 06 Jun 2021 14:15:32 GMT
 Content-Length: 17
+# curl -u admin:123456 traefik.opsk8s.com/api/http/routers
+[{"entryPoints":["tcpep","web","websecure"],"middlewares":["kube-system-traefik-dashboard-middleware@kubernetescrd"],"service":"api@internal","rule":"Host(`traefik.opsk8s.com`) \u0026\u0026 (PathPrefix(`/api`) || PathPrefix(`/dashboard`))","status":"enabled","using":["tcpep","web","websecure"],"name":"kube-system-traefik-dashboard-ingress-route-4d832f59d314c75f16e8@kubernetescrd","provider":"kubernetescrd"},{"entryPoints":["traefik"],"service":"ping@internal","rule":"PathPrefix(`/ping`)","priority":2147483647,"status":"enabled","using":["traefik"],"name":"ping@internal","provider":"internal"},{"entryPoints":["traefik"],"service":"prometheus@internal","rule":"PathPrefix(`/metrics`)","priority":2147483647,"status":"enabled","using":["traefik"],"name":"prometheus@internal","provider":"internal"},{"entryPoints":["web"],"service":"terraform-terraform-python-demo-service-80","rule":"Host(`demo-python.opsk8s.com`) \u0026\u0026 PathPrefix(`/`)","status":"enabled","using":["web"],"name":"terraform-python-demo-ingress-terraform-demo-python-opsk8s-com@kubernetes","provider":"kubernetes"}]
 ```
