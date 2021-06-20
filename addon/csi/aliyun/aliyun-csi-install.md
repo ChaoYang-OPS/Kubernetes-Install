@@ -43,23 +43,6 @@ deployment.apps/deployment-oss created
 , with error: exit status 1, out: Fail: systemd-run --scope -- /usr/local/bin/ossfs ops-kubernetes:/kubernetes /var/lib/kubelet/pods/cf6b8006-d120-42c3-93a0-e9210f60a6c4/volumes/kubernetes.io~csi/oss-csi-pv/mount -ourl=ops-kubernetes.oss-cn-chengdu.aliyuncs.com -o max_stat_cache_size=0 -o allow_other, error: Failed to run cmd: systemd-run --scope -- /usr/local/bin/ossfs ops-kubernetes:/kubernetes /var/lib/kubelet/pods/cf6b8006-d120-42c3-93a0-e9210f60a6c4/volumes/kubernetes.io~csi/oss-csi-pv/mount -ourl=ops-kubernetes.oss-cn-chengdu.aliyuncs.com -o max_stat_cache_size=0 -o allow_other, with out: Failed to find executable /usr/local/bin/ossfs: No such file or directory
 , with error: exit status 1
 # 排查错误
-# kubectl logs -f csi-plugin-22bj9 -c csi-plugin -n kube-system
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:--  0:00:31 --:--:--     0curl: (7) Failed to connect to 100.100.100.200 port 80: Connection timed out
-Running oss plugin....
-Starting deploy oss csi-plugin....
-First install ossfs, ossfsVersion: 1.86.2
-nsenter: failed to execute yum: No such file or directory
-Check csiplugin-connector.service....
-time="2021-06-20T15:26:02+08:00" level=info msg="Multi CSI Driver Name: oss, nodeID: , endPoints: unix://var/lib/kubelet/csi-plugins/driverplugin.csi.alibabacloud.com-replace/csi.sock"
-time="2021-06-20T15:26:02+08:00" level=info msg="CSI Driver Branch: 'master', Version: 'v1.18.8.47-906bd535-aliyun', Build time: '2021-05-13-20:56:55'\n"
-time="2021-06-20T15:26:02+08:00" level=info msg="Create Stroage Path: /var/lib/kubelet/csi-plugins/ossplugin.csi.alibabacloud.com/controller"
-time="2021-06-20T15:26:02+08:00" level=info msg="Create Stroage Path: /var/lib/kubelet/csi-plugins/ossplugin.csi.alibabacloud.com/node"
-time="2021-06-20T15:26:02+08:00" level=info msg="CSI is running status."
-time="2021-06-20T15:26:02+08:00" level=info msg="Driver: ossplugin.csi.alibabacloud.com version: 1.0.0"
-time="2021-06-20T15:26:02+08:00" level=info msg="Metric listening on address: /healthz"
-time="2021-06-20T15:26:02+08:00" level=info msg="Metric listening on address: /metrics"
 # worker节点 (数据面板)安装 ossfs
 # 参考文档: https://github.com/aliyun/ossfs
 # apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev  libfuse-dev libssl-dev libxml2-dev make pkg-config
