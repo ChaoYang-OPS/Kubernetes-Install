@@ -43,7 +43,7 @@ deployment.apps/deployment-oss created
 , with error: exit status 1, out: Fail: systemd-run --scope -- /usr/local/bin/ossfs ops-kubernetes:/kubernetes /var/lib/kubelet/pods/cf6b8006-d120-42c3-93a0-e9210f60a6c4/volumes/kubernetes.io~csi/oss-csi-pv/mount -ourl=ops-kubernetes.oss-cn-chengdu.aliyuncs.com -o max_stat_cache_size=0 -o allow_other, error: Failed to run cmd: systemd-run --scope -- /usr/local/bin/ossfs ops-kubernetes:/kubernetes /var/lib/kubelet/pods/cf6b8006-d120-42c3-93a0-e9210f60a6c4/volumes/kubernetes.io~csi/oss-csi-pv/mount -ourl=ops-kubernetes.oss-cn-chengdu.aliyuncs.com -o max_stat_cache_size=0 -o allow_other, with out: Failed to find executable /usr/local/bin/ossfs: No such file or directory
 , with error: exit status 1
 # 排查错误
-# worker节点 (数据面板)安装 ossfs
+# worker节点 (数据面板)安装 ossfs,如果是Centos系统，会自动安装这个命令，我这边是需要安装的
 # 参考文档: https://github.com/aliyun/ossfs
 # apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev  libfuse-dev libssl-dev libxml2-dev make pkg-config
 # git clone https://github.com/aliyun/ossfs.git
