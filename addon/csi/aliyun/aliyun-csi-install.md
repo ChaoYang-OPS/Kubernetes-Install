@@ -1,4 +1,4 @@
-# install csi for aliyun
+# install csi oss for aliyun
 
 ```shell
 # https://github.com/kubernetes-sigs/alibaba-cloud-csi-driver/tree/master?spm=a2c4g.11186623.2.24.4b473fc76B59lj
