@@ -92,4 +92,11 @@ alicloud_oss_bucket.terraform_oss_bucket: Destroying... [id=terrofrom-ops-bucket
 alicloud_oss_bucket.terraform_oss_bucket: Destruction complete after 1s
 
 Destroy complete! Resources: 1 destroyed.
+
+# 转换JSON
+# terraform plan -target=vars.tf -out vars.bin
+# terraform show -json vars.bin
+{"format_version":"0.1","terraform_version":"0.14.10","variables":{"access_key":{"value":""},"aliyun_oss_bucket_name":{"value":""},"aliyun_region":{"value":"cn-chengdu"},"secret_key":{"value":""}},"planned_values":{"root_module":{}},"configuration":{"provider_config":{"alicloud":{"name":"alicloud","expressions":{"access_key":{"references":["var.access_key"]},"region":{"references":["var.aliyun_region"]},"secret_key":{"references":["var.secret_key"]}}}},"root_module":{"resources":[{"address":"alicloud_oss_bucket.terraform_oss_bucket","mode":"managed","type":"alicloud_oss_bucket","name":"terraform_oss_bucket","provider_config_key":"alicloud","expressions":{"acl":{"constant_value":"private"},"bucket":{"references":["var.aliyun_oss_bucket_name"]}},"schema_version":0}],"variables":{"access_key":{"default":""},"aliyun_oss_bucket_name":{"default":""},"aliyun_region":{"default":"cn-chengdu"},"secret_key":{"default":""}}}}}
+# 写入文件
+# terraform show -json vars.bin > vars.json
 ```
