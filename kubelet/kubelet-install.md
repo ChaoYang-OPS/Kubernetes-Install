@@ -101,6 +101,8 @@ volumeStatsAggPeriod: 1m0s
       --cni-bin-dir=/opt/cni/bin \
       --config=../conf/kubelet-conf.yaml \
       --node-labels=node.kubernetes.io/node='' \
+      --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 \
+      --image-pull-progress-deadline=30m \
       --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause-amd64:3.1
 # chmod +x /data/applications/kubernetes-v1.19.10/server/scripts/kube-kubelet-service.sh
 # cat /etc/supervisor/conf.d/kube-kubelet-service.conf
