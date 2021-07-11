@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-oss-pv
+  namespace: monitoring
+  labels:
+    alicloud-pvname: grafana-oss-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: ossplugin.csi.alibabacloud.com
+    # set volumeHandle same value pv name
+    volumeHandle: grafana-oss-pv
+    volumeAttributes:
+      bucket: "ops-kubernetes"
+      url: "oss-cn-chengdu.aliyuncs.com"
+      otherOpts: "-o max_stat_cache_size=0 -o allow_other"
+      akId: "*****"
+      akSecret: "****"
+      path: "/kubernetes/*"

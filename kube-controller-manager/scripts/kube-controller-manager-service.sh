@@ -3,10 +3,13 @@
       --v=2 \
       --logtostderr=true \
       --address=127.0.0.1 \
+      --bind-address=0.0.0.0  \
+      --secure-port=10257 \
       --root-ca-file=../certs/kubernetes-ca.pem \
       --cluster-signing-cert-file=../certs/kubernetes-ca.pem \
       --cluster-signing-key-file=../certs/kubernetes-ca-key.pem \
       --service-account-private-key-file=../certs/service-account.key \
+      --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 \
       --kubeconfig=../conf/kube-controller-manager.kubeconfig \
       --log-dir=/opt/logs/kubernetes/kube-controller-manager-service \
       --leader-elect=true \

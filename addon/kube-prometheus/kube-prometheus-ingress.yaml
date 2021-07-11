@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  # annotations:
+  #   traefik.ingress.kubernetes.io/router.entrypoints: web
+  name: kube-prometheus-ingress
+  namespace: monitoring
+spec:
+  rules:
+  - host: grafana.opsk8s.com
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: 3000
+        path: /
+  - host: alertmanager.opsk8s.com
+    http:
+      paths:
+      - backend:
+          serviceName: alertmanager-main
+          servicePort: 9093
+        path: /
+
+  - host: prometheus.opsk8s.com
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-k8s
+          servicePort: 9090
+        path: /
