@@ -4,7 +4,8 @@ data-dir: /data/applications/data/etcd-data
 snapshot-count: 5000
 heartbeat-interval: 100
 election-timeout: 1000
-quota-backend-bytes: 0
+quota-backend-bytes: 8589934592
+max-request-bytes: 10485760
 listen-peer-urls: 'https://172.16.100.62:2380'
 listen-client-urls: 'https://172.16.100.62:2379,http://127.0.0.1:2379'
 max-snapshots: 3
