@@ -188,3 +188,114 @@ rules:
   - level: Metadata
 
 ```
+# 静态加密
+```shell
+# refer: https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
+# head -c 32 /dev/urandom | base64
+rbKljLKeL7f1CiGDUj+T0CnpB3kNDoYkotgLd8e8ysk=
+# 控制面板需要加入以下配置
+# cat /data/applications/kubernetes/server/conf/encryptionconfiguration.yaml
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+    - secrets
+    providers:
+    - aescbc:
+        keys:
+        - name: key1
+          secret: rbKljLKeL7f1CiGDUj+T0CnpB3kNDoYkotgLd8e8ysk=
+    - identity: {}
+# chmod 600 /data/applications/kubernetes/server/conf/encryptionconfiguration.yaml
+# modify start scripts file
+# /data/applications/kubernetes/server/scripts/kube-apiserver-service.sh
+# grep "encryptionconfiguration.yaml" /data/applications/kubernetes/server/scripts/kube-apiserver-service.sh
+      --encryption-provider-config=../conf/encryptionconfiguration.yaml \
+# supervisorctl restart kube-apiserver-service
+kube-apiserver-service: stopped
+kube-apiserver-service: started
+# Verifying that data is encrypted
+# Create a new secret called secret1 in the default namespace:
+# kubectl create secret generic secret1 -n default --from-literal=mykey=mydata
+secret/secret1 created
+# kubectl get secret secret1 -o jsonpath='{.data}'
+{"mykey":"bXlkYXRh"}
+# /data/applications/etcd-service/etcdctl --endpoints="172.16.100.61:2379,172.16.100.62:2379,172.16.100.63:2379" --cacert=/data/applications/etcd-service/certs/etcd-service-ca.pem --cert=/data/applications/etcd-service/certs/etcd-server-keys.pem --key=/data/applications/etcd-service/certs/etcd-server-keys-key.pem get /registry/secrets/default/secret1
+/registry/secrets/default/secret1
+k8s:enc:aescbc:v1:key1:5
+# Ensure all secrets are encrypted
+# kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+secret/default-token-cqxbc replaced
+secret/secret1 replaced
+secret/default-token-jbd7n replaced
+secret/devops-mysql-secrets replaced
+secret/default-token-kc4qg replaced
+secret/default-token-pd2fx replaced
+secret/admin-traefik replaced
+secret/attachdetach-controller-token-75smq replaced
+secret/bootstrap-signer-token-w47mt replaced
+secret/bootstrap-token-c3c5c6 replaced
+secret/calico-kube-controllers-token-zzj7q replaced
+secret/calico-node-token-sb4mf replaced
+secret/certificate-controller-token-zq8ll replaced
+secret/clusterrole-aggregation-controller-token-j2zz2 replaced
+secret/coredns-token-m85tz replaced
+secret/cronjob-controller-token-gxgtw replaced
+secret/csi-admin-token-qwtkj replaced
+secret/daemon-set-controller-token-b66mz replaced
+secret/default-token-gc82x replaced
+secret/deployment-controller-token-ptvd8 replaced
+secret/disruption-controller-token-2jlpq replaced
+secret/endpoint-controller-token-fcng8 replaced
+secret/endpointslice-controller-token-v6tcv replaced
+secret/endpointslicemirroring-controller-token-zk2br replaced
+secret/expand-controller-token-4ctqp replaced
+secret/generic-garbage-collector-token-7xrk7 replaced
+secret/horizontal-pod-autoscaler-token-cmdtj replaced
+secret/job-controller-token-w9cj6 replaced
+secret/kube-dns-autoscaler-token-k7sql replaced
+secret/kube-eventer-token-hsrg5 replaced
+secret/kube-proxy-token-qjk7m replaced
+secret/metrics-server-token-n7rkb replaced
+secret/namespace-controller-token-hgkkh replaced
+secret/node-controller-token-h75nl replaced
+secret/node-problem-detector-token-pn8qc replaced
+secret/persistent-volume-binder-token-kz8q9 replaced
+secret/pod-garbage-collector-token-7q8xt replaced
+secret/pv-protection-controller-token-spfbm replaced
+secret/pvc-protection-controller-token-hgd5w replaced
+secret/replicaset-controller-token-pjqvs replaced
+secret/replication-controller-token-hsljw replaced
+secret/resourcequota-controller-token-lktgx replaced
+secret/service-account-controller-token-jdgv4 replaced
+secret/service-controller-token-pngtc replaced
+secret/statefulset-controller-token-txmxj replaced
+secret/super-user-token-bb8s5 replaced
+secret/token-cleaner-token-hqn2h replaced
+secret/traefik-dashboard-auth replaced
+secret/traefik-ingress-controller-token-9ljt8 replaced
+secret/ttl-controller-token-jjxf9 replaced
+secret/default-token-x2wpc replaced
+secret/kubernetes-dashboard-certs replaced
+secret/kubernetes-dashboard-csrf replaced
+secret/kubernetes-dashboard-key-holder replaced
+secret/kubernetes-dashboard-token-6r89p replaced
+secret/alertmanager-main replaced
+secret/alertmanager-main-generated replaced
+secret/alertmanager-main-tls-assets replaced
+secret/alertmanager-main-token-5gtlq replaced
+secret/default-token-b5m2w replaced
+secret/grafana-datasources replaced
+secret/grafana-token-tcnsd replaced
+secret/kube-state-metrics-token-wt4c2 replaced
+secret/node-exporter-token-j97r4 replaced
+secret/prometheus-adapter-token-5gdtt replaced
+secret/prometheus-k8s replaced
+secret/prometheus-k8s-tls-assets replaced
+secret/prometheus-k8s-token-7npcz replaced
+secret/prometheus-operator-token-69qx9 replaced
+secret/default-token-g8l2g replaced
+secret/default-candidate-registry-secret replaced
+secret/default-token-42fm9 replaced
+secret/default-token-hktkc replaced
+```
