@@ -8,7 +8,7 @@ kube-kubelet-service: stopped
 root@172-16-100-63:~# systemctl stop docker
 root@172-16-100-63:~# systemctl disable docker
 root@172-16-100-63:~# systemctl stop containerd
-
+root@172-16-100-63:~# iptables -t nat -F 
 # create containerd config dir
 root@172-16-100-63:~# mkdir -p /etc/containerd 
 root@172-16-100-63:~# containerd config default | tee /etc/containerd/config.toml
