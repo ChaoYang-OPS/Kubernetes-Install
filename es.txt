@@ -1,0 +1,56 @@
+root@172-16-100-62:~# kubectl get pods -n es
+NAME                      READY   STATUS    RESTARTS   AGE
+quickstart-es-default-0   1/1     Running   0          77s
+root@172-16-100-62:~# kubectl get elasticsearch
+No resources found in default namespace.
+root@172-16-100-62:~# kubectl get elasticsearch -n es
+NAME         HEALTH   NODES   VERSION   PHASE   AGE
+quickstart   green    1       8.3.2     Ready   97s
+root@172-16-100-62:~# kubectl get pods -n es
+NAME                      READY   STATUS    RESTARTS   AGE
+quickstart-es-default-0   1/1     Running   0          88s
+root@172-16-100-62:~# kubectl get service quickstart-es-http
+Error from server (NotFound): services "quickstart-es-http" not found
+root@172-16-100-62:~# kubectl get service quickstart-es-http -n es
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+quickstart-es-http   ClusterIP   10.99.135.248   <none>        9200/TCP   2m10s
+root@172-16-100-62:~# PASSWORD=$(kubectl get secret quickstart-es-elastic-user -o go-template='{{.data.elastic | base64decode}}')
+Error from server (NotFound): secrets "quickstart-es-elastic-user" not found
+root@172-16-100-62:~# PASSWORD=$(kubectl get secret quickstart-es-elastic-user -n es -o go-template='{{.data.elastic | base64decode}}')
+root@172-16-100-62:~# curl -u "elastic:$PASSWORD" -k "https://quickstart-es-http:9200"
+curl: (6) Could not resolve host: quickstart-es-http
+root@172-16-100-62:~# curl -u "elastic:$PASSWORD" -k "https://quickstart-es-http.es:9200"
+curl: (6) Could not resolve host: quickstart-es-http.es
+root@172-16-100-62:~# curl -u "elastic:$PASSWORD" -k "https://quickstart-es-http.es:9200"
+curl: (6) Could not resolve host: quickstart-es-http.es
+root@172-16-100-62:~# curl 10.99.135.248
+404 page not found
+root@172-16-100-62:~# curl 10.99.135.248:9200
+curl: (52) Empty reply from server
+root@172-16-100-62:~# curl https://10.99.135.248:9200
+curl: (60) SSL certificate problem: self signed certificate in certificate chain
+More details here: https://curl.haxx.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+root@172-16-100-62:~# curl https://10.99.135.248:9200  -k
+{"error":{"root_cause":[{"type":"security_exception","reason":"missing authentication credentials for REST request [/]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","Bearer realm=\"security\"","ApiKey"]}}],"type":"security_exception","reason":"missing authentication credentials for REST request [/]","header":{"WWW-Authenticate":["Basic realm=\"security\" charset=\"UTF-8\"","Bearer realm=\"security\"","ApiKey"]}},"status":401}root@172-16-100-62:~#
+root@172-16-100-62:~#
+root@172-16-100-62:~# curl -u "elastic:$PASSWORD" https://10.99.135.248:9200  -k
+{
+  "name" : "quickstart-es-default-0",
+  "cluster_name" : "quickstart",
+  "cluster_uuid" : "7xMm0jJZRAemhFLPoFM8eA",
+  "version" : {
+    "number" : "8.3.2",
+    "build_type" : "docker",
+    "build_hash" : "8b0b1f23fbebecc3c88e4464319dea8989f374fd",
+    "build_date" : "2022-07-06T15:15:15.901688194Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.2.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
